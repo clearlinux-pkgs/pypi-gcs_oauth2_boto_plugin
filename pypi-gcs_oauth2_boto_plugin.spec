@@ -4,7 +4,7 @@
 #
 Name     : pypi-gcs_oauth2_boto_plugin
 Version  : 3.0
-Release  : 65
+Release  : 66
 URL      : https://files.pythonhosted.org/packages/05/e5/3162be0abab32f152f331423426471935f286dd4ad70fa704f2a34ea3c1e/gcs-oauth2-boto-plugin-3.0.tar.gz
 Source0  : https://files.pythonhosted.org/packages/05/e5/3162be0abab32f152f331423426471935f286dd4ad70fa704f2a34ea3c1e/gcs-oauth2-boto-plugin-3.0.tar.gz
 Summary  : Auth plugin allowing use the use of OAuth 2.0 credentials for Google Cloud Storage in the Boto library.
@@ -25,6 +25,9 @@ BuildRequires : pypi(retry)
 BuildRequires : pypi(retry_decorator)
 BuildRequires : pypi(rsa)
 BuildRequires : pypi(six)
+# Suppress stripping binaries
+%define __strip /bin/true
+%define debug_package %{nil}
 
 %description
 gcs-oauth2-boto-plugin is a Python application whose purpose is to behave as an
@@ -81,12 +84,12 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1656403972
+export SOURCE_DATE_EPOCH=1672273895
 export GCC_IGNORE_WERROR=1
-export CFLAGS="$CFLAGS -fno-lto "
-export FCFLAGS="$FFLAGS -fno-lto "
-export FFLAGS="$FFLAGS -fno-lto "
-export CXXFLAGS="$CXXFLAGS -fno-lto "
+export CFLAGS="$CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz "
+export FCFLAGS="$FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz "
+export FFLAGS="$FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz "
+export CXXFLAGS="$CXXFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz "
 export MAKEFLAGS=%{?_smp_mflags}
 pypi-dep-fix.py . rsa
 python3 setup.py build
@@ -105,7 +108,7 @@ popd
 export MAKEFLAGS=%{?_smp_mflags}
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/pypi-gcs_oauth2_boto_plugin
-cp %{_builddir}/gcs-oauth2-boto-plugin-3.0/LICENSE %{buildroot}/usr/share/package-licenses/pypi-gcs_oauth2_boto_plugin/5a7d7df655ba40478fae80a6abafc6afc36f9b6a
+cp %{_builddir}/gcs-oauth2-boto-plugin-%{version}/LICENSE %{buildroot}/usr/share/package-licenses/pypi-gcs_oauth2_boto_plugin/5a7d7df655ba40478fae80a6abafc6afc36f9b6a || :
 python3 -tt setup.py build  install --root=%{buildroot}
 pypi-dep-fix.py %{buildroot} rsa
 echo ----[ mark ]----
